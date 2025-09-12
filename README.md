@@ -55,7 +55,7 @@ Maze to Savor is a multi-player board game written in C, where 3 players navigat
 * Infinite loops from stairs/poles are detected and the player is moved to their starting cell, keeping their movement points.
 * Movement points are capped at a maximum value of 250
 * Walls are straight
-* No stairs or poles  originate from or go to the Bawana area.
+* No stairs or poles  originate from or go to the Bawana area or Standing area.
 * Stairs that go from floor 0 to floor 2 always cross floor 1 through a void space
 
 ## Compile and Run
@@ -63,7 +63,7 @@ Maze to Savor is a multi-player board game written in C, where 3 players navigat
 ### Using Bash 
 * To compile the program:
 ```
-gcc main.c game.c -o maze_runner
+gcc bawana.c helpers.c initmaze.c players.c game.c main.c -o maze_runner
 ```
 * To run the program and redirect errors to errors.txt:
 ```
