@@ -439,11 +439,20 @@ int movePlayer(Player *p, int steps, Cell maze[FLOORS][WIDTH][LENGTH], Stairmode
         }
 
         for (int i = (p->history > 5 ? p->history - 5 : 0); i < p->history; i++) {
-            if (p->lastF[i] == tempF && p->lastX[i] == tempX && p->lastY[i] == tempY) {
-                return 0;
-            }
-        }
+        if (p->lastF[i] == tempF && p->lastX[i] == tempX && p->lastY[i] == tempY) {
+            printf("Player %c detected in a movement loop! Transporting to starting area.\n", p->id);
+            
+            p->floor = p->startFloor;
+            p->x = p->startX;
+            p->y = p->startY;
+            p->inMaze = 0; 
         
+            p->movePoints = tempMP;
+            
+            return 0; 
+        }
+    }
+
         if (cell->type == 2) {
             int stairIndex = selectBestStair(cell, flag, stairMode, tempF);
             if (stairIndex >= 0) {
