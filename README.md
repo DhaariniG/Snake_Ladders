@@ -31,7 +31,7 @@ Maze to Savor is a multi-player board game written in C, where 3 players navigat
 
 ### Walls
 * Format : *[floor, start width, start length, end width, end length]*
-*Player cannot pass through these.
+* Player cannot pass through these.
 
 
 ## Bawana

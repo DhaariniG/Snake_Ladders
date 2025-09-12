@@ -41,62 +41,64 @@ void play(void) {
                 players[i].id, players[i].floor, players[i].x, players[i].y);
     }
 
-    while (isRunning) {
-        
+        while (isRunning) {
         printf("\n--------- Round %d --------\n", roundCount);
-        StairMode = currentMode(roundCount);
+
         
+        Stairmode stairMode = currentMode(roundCount);
+
         for (int i = 0; i < PLAYERS; i++) {
-            
             printf("\n--------- Player %c's Move -----------\n", players[i].id);
 
             handleBawanaEffects(&players[i], maze);
 
             if (players[i].disabledTurns > 0) {
+                printf("Player %c is still food poisoned and misses the turn.\n", players[i].id);
                 continue;
             }
 
             int steps = rollMovementDice();
-            int dirRoll = -1;
+            int result = 0;
 
             if (players[i].inMaze == 0) {
                 if (steps == 6) {
                     printf("Player %c is at the starting area and rolls 6 on the movement dice and is placed on [%d,%d,%d] of the maze.\n", players[i].id, players[i].floor, players[i].x, players[i].y);
                     players[i].inMaze = 1;
-                    int result = movePlayer(&players[i], 1, maze, StairMode, players, flag);
-                    if (result == 2) { isRunning = 0; break; }
+                    players[i].floor = players[i].startFloor;
+                    players[i].x = players[i].startX;
+                    players[i].y = players[i].startY;
                 } else {
-                    printf("Player %c is at the starting area and rolls %d on the movement dice cannot enter the maze.\n", players[i].id, steps);
+                    printf("Player %c is at the starting area and rolls %d on the movement dice and cannot enter the maze.\n", players[i].id, steps);
                 }
             } else {
-                players[i].turnCount++;
+                players[i].turnCount++; 
+                
                 if (players[i].turnCount % 4 == 0) {
-                    dirRoll = rollDirectionDice();
-                    if (dirRoll != -1) {
-                        players[i].direction = dirRoll;
-                        printf("Player %c rolls and %d on the movement dice and %d on the direction dice, changes direction to %s and moves %d cells and is now at [%d,%d,%d].\n",
-                               players[i].id, steps, dirRoll, directionToString(players[i].direction), steps, players[i].floor, players[i].x, players[i].y);
+                    int newDir = rollDirectionDice();
+                    if (newDir != -1) {
+                        players[i].direction = newDir;
+                        printf("Player %c rolls and %d on the movement dice and %d on the direction dice, changes direction to %s and moves %d cells and is now at [%d,%d,%d].\n", players[i].id, steps, newDir, directionToString(players[i].direction), steps, players[i].floor, players[i].x, players[i].y);
                     } else {
-                        printf("Player %c rolls and %d on the movement dice and moves %s by %d cells and is now at [%d,%d,%d].\n",
-                           players[i].id, steps, directionToString(players[i].direction), steps, players[i].floor, players[i].x, players[i].y);
+                        printf("Player %c rolls and %d on the movement dice and moves %s by %d cells and is now at [%d,%d,%d].\n", players[i].id, steps, directionToString(players[i].direction), steps, players[i].floor, players[i].x, players[i].y);
                     }
                 } else {
-                     printf("Player %c rolls and %d on the movement dice and moves %s by %d cells and is now at [%d,%d,%d].\n",
-                           players[i].id, steps, directionToString(players[i].direction), steps, players[i].floor, players[i].x, players[i].y);
+                     printf("Player %c rolls and %d on the movement dice and moves %s by %d cells and is now at [%d,%d,%d].\n", players[i].id, steps, directionToString(players[i].direction), steps, players[i].floor, players[i].x, players[i].y);
                 }
-                int result = movePlayer(&players[i], steps, maze, StairMode, players, flag);
-                if (result == 2) { isRunning = 0; break; }
+                
+                result = movePlayer(&players[i], steps, maze, stairMode, players, flag);
+                if (result == 2) { 
+                    isRunning = 0; 
+                    break; 
+                }
             }
-            
             
             if (players[i].inMaze) {
                  printf("Player %c now has %d movement points.\n", players[i].id, players[i].movePoints);
             }
         }
         roundCount++;
-        if (!isRunning) { break; }
     }
     fclose(logFile);
-
+    exit(0);
 
 }

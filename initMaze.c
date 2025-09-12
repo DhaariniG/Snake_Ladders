@@ -7,7 +7,7 @@
 
 void addStandingArea(Cell maze[FLOORS][WIDTH][LENGTH]) {
     for (int i = WIDTH - 4; i < WIDTH; i++) {
-        for (int j = 7; j < 16; j++) {
+        for (int j = 8; j < 16; j++) {
             maze[0][i][j].type = 1; // Walls
         }
     }

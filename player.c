@@ -80,12 +80,12 @@ int movePlayer(Player *p, int steps, Cell maze[FLOORS][WIDTH][LENGTH], Stairmode
         }
 
         if (!inBounds(nextFloor, nextX, nextY) || maze[nextFloor][nextX][nextY].type == 1 || maze[nextFloor][nextX][nextY].type == 5) {
-            
+            // New: Deduct 2 movement points for a failed move.
             tempMP -= 2;
 
             printf("%c rolls and %d on the movement dice and cannot move in the %s direction. Player remains at [%d,%d,%d]\n", p->id, steps, directionToString(p->direction), p->floor, p->x, p->y);
             
-           
+            // Check if MP is now depleted after the failed move
             if (tempMP <= 0) {
                 p->movePoints = tempMP;
                 printf("Player %c movement points are depleted and requires replenishment. Transporting to Bawana.\n", p->id);
@@ -109,26 +109,17 @@ int movePlayer(Player *p, int steps, Cell maze[FLOORS][WIDTH][LENGTH], Stairmode
         tempMP += cell->bonusAdd;
         if (cell->bonusMul > 0) tempMP *= cell->bonusMul;
 
-        
+        // New: Apply movement point cap
         if (tempMP > MAX_MP) {
             tempMP = MAX_MP;
         }
 
         for (int i = (p->history > 5 ? p->history - 5 : 0); i < p->history; i++) {
-        if (p->lastF[i] == tempF && p->lastX[i] == tempX && p->lastY[i] == tempY) {
-            printf("Player %c detected in a movement loop! Transporting to starting area.\n", p->id);
-            
-            p->floor = p->startFloor;
-            p->x = p->startX;
-            p->y = p->startY;
-            p->inMaze = 0; 
-        
-            p->movePoints = tempMP;
-            
-            return 0; 
+            if (p->lastF[i] == tempF && p->lastX[i] == tempX && p->lastY[i] == tempY) {
+                return 0;
+            }
         }
-    }
-
+        
         if (cell->type == 2) {
             int stairIndex = selectBestStair(cell, flag, stairMode, tempF);
             if (stairIndex >= 0) {
@@ -175,5 +166,3 @@ int movePlayer(Player *p, int steps, Cell maze[FLOORS][WIDTH][LENGTH], Stairmode
 
     return 0;
 }
-
-
