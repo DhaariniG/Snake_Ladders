@@ -80,12 +80,10 @@ int movePlayer(Player *p, int steps, Cell maze[FLOORS][WIDTH][LENGTH], Stairmode
         }
 
         if (!inBounds(nextFloor, nextX, nextY) || maze[nextFloor][nextX][nextY].type == 1 || maze[nextFloor][nextX][nextY].type == 5) {
-            // New: Deduct 2 movement points for a failed move.
             tempMP -= 2;
 
             printf("%c rolls and %d on the movement dice and cannot move in the %s direction. Player remains at [%d,%d,%d]\n", p->id, steps, directionToString(p->direction), p->floor, p->x, p->y);
             
-            // Check if MP is now depleted after the failed move
             if (tempMP <= 0) {
                 p->movePoints = tempMP;
                 printf("Player %c movement points are depleted and requires replenishment. Transporting to Bawana.\n", p->id);
@@ -109,7 +107,6 @@ int movePlayer(Player *p, int steps, Cell maze[FLOORS][WIDTH][LENGTH], Stairmode
         tempMP += cell->bonusAdd;
         if (cell->bonusMul > 0) tempMP *= cell->bonusMul;
 
-        // New: Apply movement point cap
         if (tempMP > MAX_MP) {
             tempMP = MAX_MP;
         }

@@ -5,6 +5,7 @@
 #include "initMaze.h"    
 #include "player.h"  
 #include "bawana.h"  
+#include "reachability.h"
 
 FILE *logFile = NULL; 
 
@@ -16,7 +17,7 @@ void play(void) {
     logFile = fopen("log.txt", "w");
     if (!logFile) {
         fprintf(stderr, "Error: could not open log.txt\n");
-        exit(1);
+
     }
 
 
@@ -31,8 +32,19 @@ void play(void) {
         {'C', 0, 9, 16, 0, 9, 16, 1, 0, 0, 100, 0, 0, 0, 0, {0}, {0}, {0}}
     };
 
-    Stairmode StairMode = currentMode(0);
-    initMaze(maze, &flag, StairMode);
+    Stairmode stairMode = currentMode(0);
+    initMaze(maze, &flag, stairMode);
+
+    
+    for (int i = 0; i < PLAYERS; i++) {
+        if (!checkReachability(maze, players[i].startFloor, players[i].startX, players[i].startY, flag)) {
+    printf("The flag is NOT reachable from any player's start position.\n");
+    return;
+}
+
+    }
+    
+    
 
     int isRunning = 1, roundCount = 1;
 
@@ -45,7 +57,7 @@ void play(void) {
         printf("\n--------- Round %d --------\n", roundCount);
 
         
-        Stairmode stairMode = currentMode(roundCount);
+       stairMode = currentMode(roundCount);
 
         for (int i = 0; i < PLAYERS; i++) {
             printf("\n--------- Player %c's Move -----------\n", players[i].id);

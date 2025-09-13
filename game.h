@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <stdio.h>
 #define FLOORS 3
 #define WIDTH 10
 #define LENGTH 25

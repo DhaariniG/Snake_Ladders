@@ -63,7 +63,7 @@ Maze to Savor is a multi-player board game written in C, where 3 players navigat
 ### Using Bash 
 * To compile the program:
 ```
-gcc bawana.c helpers.c initmaze.c players.c game.c main.c -o maze_runner
+gcc bawana.c helpers.c initmaze.c players.c game.c main.c reachability.c -o maze_runner
 ```
 * To run the program and redirect errors to errors.txt:
 ```
