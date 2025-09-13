@@ -1,10 +1,10 @@
-#include <stdio.h>   
-#include <stdlib.h>  
-#include "game.h"    
-#include "helpers.h"   
-#include "initMaze.h"    
-#include "player.h"  
-#include "bawana.h"  
+#include <stdio.h> 
+#include <stdlib.h>
+#include "game.h" 
+#include "helpers.h"  
+#include "initMaze.h"
+#include "player.h" 
+#include "bawana.h" 
 #include "reachability.h"
 
 FILE *logFile = NULL; 
@@ -17,7 +17,7 @@ void play(void) {
     logFile = fopen("log.txt", "w");
     if (!logFile) {
         fprintf(stderr, "Error: could not open log.txt\n");
-
+        exit(1);
     }
 
 
@@ -31,7 +31,7 @@ void play(void) {
         {'B', 0, 9, 8, 0, 9, 8, 3, 0, 0, 100, 0, 0, 0, 0, {0}, {0}, {0}},
         {'C', 0, 9, 16, 0, 9, 16, 1, 0, 0, 100, 0, 0, 0, 0, {0}, {0}, {0}}
     };
-
+    
     Stairmode stairMode = currentMode(0);
     initMaze(maze, &flag, stairMode);
 
@@ -57,7 +57,7 @@ void play(void) {
         printf("\n--------- Round %d --------\n", roundCount);
 
         
-       stairMode = currentMode(roundCount);
+        stairMode = currentMode(roundCount);
 
         for (int i = 0; i < PLAYERS; i++) {
             printf("\n--------- Player %c's Move -----------\n", players[i].id);
@@ -80,7 +80,7 @@ void play(void) {
                     players[i].x = players[i].startX;
                     players[i].y = players[i].startY;
                 } else {
-                    printf("Player %c is at the starting area and rolls %d on the movement dice and cannot enter the maze.\n", players[i].id, steps);
+                    printf("Player %c is at the starting area and rolls %d on the movement dice cannot enter the maze.\n", players[i].id, steps);
                 }
             } else {
                 players[i].turnCount++; 
@@ -89,13 +89,8 @@ void play(void) {
                     int newDir = rollDirectionDice();
                     if (newDir != -1) {
                         players[i].direction = newDir;
-                        printf("Player %c rolls and %d on the movement dice and %d on the direction dice, changes direction to %s and moves %d cells and is now at [%d,%d,%d].\n", players[i].id, steps, newDir, directionToString(players[i].direction), steps, players[i].floor, players[i].x, players[i].y);
-                    } else {
-                        printf("Player %c rolls and %d on the movement dice and moves %s by %d cells and is now at [%d,%d,%d].\n", players[i].id, steps, directionToString(players[i].direction), steps, players[i].floor, players[i].x, players[i].y);
-                    }
-                } else {
-                     printf("Player %c rolls and %d on the movement dice and moves %s by %d cells and is now at [%d,%d,%d].\n", players[i].id, steps, directionToString(players[i].direction), steps, players[i].floor, players[i].x, players[i].y);
-                }
+                    } 
+                } 
                 
                 result = movePlayer(&players[i], steps, maze, stairMode, players, flag);
                 if (result == 2) { 
@@ -103,14 +98,14 @@ void play(void) {
                     break; 
                 }
             }
-            
-            if (players[i].inMaze) {
-                 printf("Player %c now has %d movement points.\n", players[i].id, players[i].movePoints);
-            }
         }
         roundCount++;
     }
     fclose(logFile);
     exit(0);
-
 }
+
+
+
+
+

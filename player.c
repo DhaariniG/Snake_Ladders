@@ -63,6 +63,10 @@ int movePlayer(Player *p, int steps, Cell maze[FLOORS][WIDTH][LENGTH], Stairmode
     int actualSteps = steps;
     if (p->triggeredTurns > 0) actualSteps *= 2; 
 
+ 
+    printf("Player %c rolls %d on the movement dice and moves %s by %d cells.\n",
+           p->id, steps, directionToString(p->direction), steps);
+
     int tempX = p->x, tempY = p->y, tempF = p->floor;
     int tempMP = p->movePoints;
     int remainingSteps = actualSteps;
@@ -82,7 +86,7 @@ int movePlayer(Player *p, int steps, Cell maze[FLOORS][WIDTH][LENGTH], Stairmode
         if (!inBounds(nextFloor, nextX, nextY) || maze[nextFloor][nextX][nextY].type == 1 || maze[nextFloor][nextX][nextY].type == 5) {
             tempMP -= 2;
 
-            printf("%c rolls and %d on the movement dice and cannot move in the %s direction. Player remains at [%d,%d,%d]\n", p->id, steps, directionToString(p->direction), p->floor, p->x, p->y);
+            printf("Player %c cannot complete the full move due to a blocked path. Player remains at [%d,%d,%d]\n", p->id, p->floor, p->x, p->y);
             
             if (tempMP <= 0) {
                 p->movePoints = tempMP;
@@ -158,8 +162,8 @@ int movePlayer(Player *p, int steps, Cell maze[FLOORS][WIDTH][LENGTH], Stairmode
 
     if (checkWin(p, flag)) return 2;
 
-    printf("%c moved %d cells that cost %d movement points and is left with %d and is moving in the %s.\n",
-           p->id, actualSteps, totalCost, p->movePoints, directionToString(p->direction));
+    printf("Player %c moved %d cells that cost %d movement points and is now at [%d,%d,%d].\n",
+           p->id, cellsMoved, totalCost, p->floor, p->x, p->y);
 
     return 0;
 }
