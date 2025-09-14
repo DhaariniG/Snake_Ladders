@@ -78,28 +78,27 @@ void play(void) {
 
             if (players[i].inMaze == 0) {
                 if (steps == 6) {
-                    printf("Player %c is at the starting area and rolls 6 on the movement dice "
-                           "and is placed on [%d,%d,%d] of the maze.\n", 
-                           players[i].id, players[i].floor, players[i].x, players[i].y);
-                    players[i].inMaze = 1;
-                    players[i].floor = players[i].startFloor;
-                    players[i].x = players[i].startX;
-                    players[i].y = players[i].startY;
-                } else {
-                    printf("Player %c is at the starting area and rolls %d on the movement dice "
-                           "and cannot enter the maze.\n", players[i].id, steps);
+                    result = movePlayer(&players[i],1,maze, stairMode, players, flag);
+                    if (result == 2) {
+                    isRunning = 0;
+                    break;
                 }
+                    printf("Player %c is at the starting area and rolls 6 on the movement dice and is placed on [%d,%d,%d] of the maze.\n", 
+                           players[i].id, players[i].floor, players[i].x, players[i].y);
+
+                    players[i].inMaze = 1;
+                } else {
+                    printf("Player %c is at the starting area and rolls %d on the movement dice and cannot enter the maze.\n", players[i].id, steps);
+                }
+
+
             } else {
                 players[i].turnCount++;
 
-                if (players[i].turnCount % 4 == 0) {
-                    int newDir = rollDirectionDice();
-                    if (newDir != -1) {
-                        players[i].direction = newDir;
-                    }
-                }
-
                 result = movePlayer(&players[i], steps, maze, stairMode, players, flag);
+                if(result == 0){
+                    continue;
+                }
                 if (result == 2) {
                     isRunning = 0;
                     break;
