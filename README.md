@@ -12,7 +12,7 @@ Maze to Savor is a multi-player board game written in C, where 3 players navigat
 ## Maze Design
 * 3 Floors
 * Block size 4 sq.ft each
-* Coordinate format of a cell : [floor number, width index, length index]
+* Coordinate format of a cell : *[floor number, width index, length index]*
 * Cell starts at *[0,0,0]*
 
 ## Movement Rules
@@ -37,11 +37,11 @@ Maze to Savor is a multi-player board game written in C, where 3 players navigat
 ## Bawana
 * Special area where players go when their movement points are not sufficient to make a move.
 * 5 special effects from bawana
-+ Food poisoning: miss next 3 turns
-+ Disoriented: random movement with 50 movement points
-+ Triggered: double movement with 50 movement points
-+ Happy: gains 200 movement points
-+ Random: gains random movement points from 10 to 100
+    + Food poisoning: misser next 3 turns
+    + Disoriented: random movement with 50 movement points
+    + Triggered: double movement with 50 movement points
+    + Happy: gains 200 movement points
+    + Random: gains random movement points from 10 to 100
 
 ## Inputs
 * `stairs.txt`
@@ -52,11 +52,12 @@ Maze to Savor is a multi-player board game written in C, where 3 players navigat
 
 ## Assumptions
 * Maximum of two stairs can originate from the same cell; the closest stair to the flag is chosen.
-* Infinite loops from stairs/poles are detected and the player is moved to their starting cell, keeping their movement points.
-* Movement points are capped at a maximum value of 250
-* Walls are straight
-* No stairs or poles  originate from or go to the Bawana area or Standing area.
-* Stairs that go from floor 0 to floor 2 always cross floor 1 through a void space
+* Infinite loops are detected and the player is moved to their starting cell, keeping their movement points.
+* Movement points are capped at a maximum value of 250.
+* Walls are straight.
+* No stairs or poles originate from or go to the Bawana area or Standing area.
+* Stairs that go from floor 0 to floor 2 always cross floor 1 through a void space.
+* No stair or pole can go through walls or void space.
 
 ## Compile and Run
 

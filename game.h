@@ -8,7 +8,7 @@
 #define PLAYERS 3
 #define MAX_MP 250 
 
-extern FILE *logFile;  
+extern FILE *logfp;  
 
 #define SEED 10
 
@@ -19,12 +19,11 @@ typedef struct {
 } Flag;
 
 typedef struct {
-    // Cell types
+    int type;
     // 0=normal, 1=wall, 2=stair, 3=pole, 4=flag, 5=void
     // Bawana-specific types: 6=FoodPoison, 7=Disoriented, 8=Triggered, 9=Happy, 10=Random
-    int type;
-
-   
+    
+    
     int targetFloor;
     int targetX;
     int targetY;
@@ -46,8 +45,11 @@ typedef struct {
 typedef struct {
     char id; // A,B,C
     int floor;
-    int x, y;
-    int startFloor, startX, startY;
+    int x;
+    int y;
+    int startFloor;
+    int startX;
+    int startY;
     int direction; // 0=N, 1=E, 2=S, 3=W
     int inMaze; // 1=yes, 0=waiting
     int turnCount;
@@ -57,6 +59,7 @@ typedef struct {
     int disorientedTurns; // disoriented
     int triggeredTurns; // triggered
 
+    //to detect loop
     int history;
     int lastF[10];
     int lastX[10];

@@ -28,7 +28,7 @@ int checkReachability(Cell maze[FLOORS][WIDTH][LENGTH], int startF, int startX, 
         CellPosition cur = queue[head++];
 
         if (cur.f == flag.floor && cur.x == flag.x && cur.y == flag.y) {
-            fprintf(logFile, "Flag is reachable\n");
+            fprintf(logfp, "Flag is reachable\n");
             return 1;
         }
 
