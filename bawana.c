@@ -24,7 +24,6 @@ void teleportToBawana(Player *p) {
     p->floor = 0;
     p->x = bawanaCellsX[choice];
     p->y = bawanaCellsY[choice];
-    p->inMaze = 0;
 }
 
 void applyBawanaEffect(Player *p, Cell *cell) {
@@ -35,15 +34,15 @@ void applyBawanaEffect(Player *p, Cell *cell) {
             break;
         case 7:
             printf("Player %c eats from Bawana and is disoriented and is placed at the entrance of Bawana with 50 movement points.\n", p->id);
-            p->movePoints += 50;
+            p->movePoints = 50;
             break;
         case 8:
             printf("Player %c eats from Bawana and is triggered due to bad quality of food. Player %c is placed at the entrance of Bawana with 50 movement points.\n", p->id, p->id);
-            p->movePoints += 50;
+            p->movePoints = 50;
             break;
         case 9:
             printf("Player %c eats from Bawana and is happy. Player %c is placed at the entrance of Bawana with 200 movement points.\n", p->id, p->id);
-            p->movePoints += 200;
+            p->movePoints = 200;
             break;
         case 10:
             printf("Player %c eats from Bawana and earns %d movement points and is placed at the [%d,%d,%d].\n", p->id, cell->bawanaValue, p->floor, p->x, p->y);
@@ -62,30 +61,41 @@ void applyBawanaEffect(Player *p, Cell *cell) {
         p->y = 19;
         p->direction = 0;
         p->inMaze = 1;
-        if (cell->type == 7) p->disorientedTurns = 4;
+        if (cell->type == 7) {
+            p->disorientedTurns = 4;
+        }
         if (cell->type == 8) p->triggeredTurns = 4;
     }
 }
 
 void handleBawanaEffects(Player *p, Cell maze[FLOORS][WIDTH][LENGTH]) {
-    if (p->disabledTurns > 0) {
+    if (p->disabledTurns >= 1) {
+        // still poisoned
         printf("Player %c is still food poisoned and misses the turn.\n", p->id);
         p->disabledTurns--;
-        if (p->disabledTurns == 0) {
-            teleportToBawana(p);
-            applyBawanaEffect(p, &maze[p->floor][p->x][p->y]);
-            printf("Player %c is now fit to proceed from the food poisoning episode and now placed on a %d and the effects take place.\n", p->id, maze[p->floor][p->x][p->y].type);
-        }
         return;
-    }
 
-    if (p->disorientedTurns > 0) {
+    }
+    else if (p->disabledTurns == 0) {
+            teleportToBawana(p);
+            Cell *bawanaCell = &maze[p->floor][p->x][p->y];
+            printf("Player %c is now fit to proceed from the food poisoning episode and now placed on a %d and the effects take place.\n",
+                   p->id, bawanaCell->type);
+            applyBawanaEffect(p, bawanaCell);
+                if(p->disabledTurns >=1){
+                    return;
+                }
+                p->disabledTurns = -1;
+            
+        }
+        
+
+    if (p->disorientedTurns >= 1) {
         p->direction = rand() % 4;
         p->disorientedTurns--;
     }
 
-    if (p->triggeredTurns > 0) {
+    if (p->triggeredTurns >= 1) {
         p->triggeredTurns--;
     }
 }
-

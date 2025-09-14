@@ -61,11 +61,39 @@ void checkCapture(Player *currentPlayer, Player players[]) {
 
 int movePlayer(Player *p, int steps, Cell maze[FLOORS][WIDTH][LENGTH], Stairmode stairMode, Player players[], Flag flag) {
     int actualSteps = steps;
-    if (p->triggeredTurns > 0) actualSteps *= 2; 
+    if(p->disabledTurns >=1 ){ 
+        return 0; 
+    }
+    else if (p->triggeredTurns > 0) { 
+        actualSteps *= 2; 
+  
 
+        printf("Player %c is triggered and rolls and %d on the movement dice and move in the %s and moves %d cells and is now at [%d,%d,%d].\n", p->id, steps, directionToString(p->direction), actualSteps, p->floor, p->x, p->y); 
+    } 
+    else if (p->disorientedTurns > 0) {  
+        printf("Player %c rolls and %d on the movement dice and is disoriented and move in the %s and moves %d cells and is now at [%d,%d,%d].\n", p->id, steps, directionToString(p->direction), steps, p->floor, p->x, p->y); 
+    }
+        
+    else if (p->disorientedTurns == 0) { 
+            printf("Player %c has recovered from disorientation.\n", p->id); 
+            p->disorientedTurns = -1;
+        } 
+    else if (p->turnCount % 4 == 0) { 
+        int newDir = rollDirectionDice(); 
+        if (newDir != -1) { 
+            p->direction = newDir; 
+            printf("Player %c rolls and %d on the movement dice and %d on the direction dice, changes direction to %s and moves %d cells and is now at [%d,%d,%d].\n", p->id, steps, newDir, directionToString(p->direction), steps, p->floor, p->x, p->y); 
+        } 
+        else { 
+            printf("Player %c rolls and %d on the movement dice and moves %s by %d cells and is now at [%d,%d,%d].\n", p->id, steps, directionToString(p->direction), steps, p->floor, p->x, p->y); 
+        } 
+    } 
+    else {
+        printf("Player %c rolls and %d on the movement dice and moves %s by %d cells and is now at [%d,%d,%d].\n", p->id, steps, directionToString(p->direction), steps, p->floor, p->x, p->y); 
+    
+    }
  
-    printf("Player %c rolls %d on the movement dice and moves %s by %d cells.\n",
-           p->id, steps, directionToString(p->direction), steps);
+ 
 
     int tempX = p->x, tempY = p->y, tempF = p->floor;
     int tempMP = p->movePoints;
